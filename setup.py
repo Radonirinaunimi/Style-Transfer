@@ -20,7 +20,7 @@ TESTS_REQUIEREMENTS = ["pytest", "pytest-cov"]
 # Depending on the documents more dependencies can be added
 DOCS_REQUIEREMENTS = ["recommonmark", "sphinx_rtd_theme", "sphinxcontrib-bibtex"]
 # Dependencies for the packages
-PACKAGE_REQUIEREMENTS = ["numpy", "torch", "torchvision"]
+PACKAGE_REQUIEREMENTS = ["numpy", "torch", "tqdm", "torchvision"]
 
 # Check python version
 if sys.version_info < (3, 6):

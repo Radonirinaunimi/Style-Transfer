@@ -30,4 +30,4 @@ jobs:
       shell: bash --login {0}
       run: |
         pip install .[tests]
-        pytest --cov=./src/<package_name>
+        pytest -v --cov=./src/timst

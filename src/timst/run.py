@@ -6,6 +6,7 @@ import logging
 import argparse
 import matplotlib.pyplot as plt
 
+from tqdm import trange
 from torchvision import models
 from timst.utils import imconvert
 from timst.utils import load_image
@@ -16,17 +17,43 @@ logging.basicConfig(level=logging.INFO, format="[%(levelname)s] %(message)s")
 log = logging.getLogger(__name__)
 
 
+def positive_int(value):
+    """Checks if the given integer is positive.
+    Parameters
+    ----------
+        value: int
+            Input integer
+    """
+    ivalue = int(value)
+    if ivalue <= 0:
+        raise argparse.ArgumentTypeError(
+            f"Negative values are not allowed: {ivalue}"
+        )
+    return ivalue
+
+
 def args_parser():
-    """Parse input arguments"""
+    """Parse input arguments
+
+    Parameters
+    ==========
+        image: jpg
+            Input image to be style
+        style: jpg
+            Style to be applied to the input image
+        niter: int
+            Total number of iterations
+    """
     parser = argparse.ArgumentParser(description="Image style transfer.")
     parser.add_argument("-i", "--image", help="Input image", required=True)
     parser.add_argument("-s", "--style", help="Style image", required=True)
+    parser.add_argument("-n", "--niter", type=positive_int, help="Iteration")
     args = parser.parse_args()
     return args
 
 
 def main():
-
+    """Main function that controls the training"""
     args = args_parser()
     content = load_image(args.image)
     style = load_image(args.style)
@@ -38,6 +65,7 @@ def main():
         param.requires_grad_(False)
     # Check if GPU is available
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    log.info("Checking GPU with CUDA.")
     log.info(f"Cuda Availability: {torch.cuda.is_available()}")
     vgg.to(device)
 
@@ -63,29 +91,36 @@ def main():
     # Proceed to training
     optimizer = torch.optim.Adam([target], lr=0.003)
 
-    steps = 2400
-    print_every = 400
+    # Total number of iterations
+    if args.niter is None:
+        steps = 2400
+    else:
+        steps = args.niter
 
-    for i in range(1, steps + 1):
-        target_features = get_features(target, vgg)
-        content_loss = torch.mean(
-            (content_features["conv4_2"] - target_features["conv4_2"]) ** 2
-        )
-        style_loss = 0
-        for layer in style_weights:
-            target_feature = target_features[layer]
-            _, d, h, w = target_feature.shape
-            target_gram = gram_matrix(target_feature)
-            style_gram = style_grams[layer]
-            layer_style_loss = style_weights[layer] * torch.mean(
-                (target_gram - style_gram) ** 2
+    # Training
+    with trange(steps) as iter_range:
+        for i in iter_range:
+            iter_range.set_description("Training")
+            target_features = get_features(target, vgg)
+            content_loss = torch.mean(
+                (content_features["conv4_2"] - target_features["conv4_2"])
+                ** 2
             )
-            style_loss += layer_style_loss / (d * h * w)
-        total_loss = style_weight * style_loss + content_weight * content_loss
-        optimizer.zero_grad()
-        total_loss.backward()
-        optimizer.step()
-
-        if i % print_every == 0:
-            print("Total Loss: ", total_loss.item())
-            plt.imshow(imconvert(target))
+            style_loss = 0
+            for layer in style_weights:
+                target_feature = target_features[layer]
+                _, d, h, w = target_feature.shape
+                target_gram = gram_matrix(target_feature)
+                style_gram = style_grams[layer]
+                layer_style_loss = style_weights[layer] * torch.mean(
+                    (target_gram - style_gram) ** 2
+                )
+                style_loss += layer_style_loss / (d * h * w)
+            total_loss = (
+                style_weight * style_loss + content_weight * content_loss
+            )
+            optimizer.zero_grad()
+            total_loss.backward()
+            optimizer.step()
+            iter_range.set_postfix(Loss=total_loss.item())
+            plt.imsave("styled_image.jpg", imconvert(target))
