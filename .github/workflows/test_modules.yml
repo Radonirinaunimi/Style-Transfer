@@ -3,14 +3,7 @@
 
 name: pytest
 
-# The following chooses at which steps this `action`
-# should be triggered. 
-# If one wants to run this action at very `push` set:
-# `on: [push]`
-on:
-  push:
-    branches:
-      - never
+on: [push]
 
 jobs:
   build:
@@ -22,31 +15,19 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v1
-    - name: Setup Python
-      uses: actions/setup-python@v1
+    - name: Setup Conda
+      uses: goanpeca/setup-miniconda@v1
       with:
         python-version: ${{ matrix.python-version }}
-    # # For Conda, comment the `Setup python` above and
-    # # use the following
-    # - name: Setup Conda
-    #   uses: goanpeca/setup-miniconda@v1
-    #   with:
-    #     python-version: ${{ matrix.python-version }}
-    #     auto-update-conda: true
+        auto-update-conda: true
     - name: Install package with the dependencies
+      shell: bash --login {0}
       run: |
-        # conda info
+        conda info
         python -m pip install --upgrade pip
         pip install .
     - name: Test code coverage
+      shell: bash --login {0}
       run: |
         pip install .[tests]
-        pytest --cov=./src/<package_name> --cov-report=xml
-    - name: Upload coverage report
-      uses: codecov/codecov-action@v1
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./coverage.xml
-        flags: unittests
-        name: codecov-umbrella
-        fail_ci_if_error: true
+        pytest -v --cov=./src/timst

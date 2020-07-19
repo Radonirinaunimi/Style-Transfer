@@ -1,9 +1,5 @@
 name: docs
 
-# The following chooses at which steps this `action`
-# should be triggered. 
-# If one wants to run this action at very `push` set:
-# `on: [push]`
 on:
   push:
     branches:
@@ -24,14 +20,8 @@ jobs:
       uses: actions/setup-python@v1
       with:
         python-version: ${{ matrix.python-version }}
-    # - name: Set up conda
-    #   uses: goanpeca/setup-miniconda@v1
-    #   with:
-    #     python-version: ${{ matrix.python-version }}
-    #     auto-update-conda: true
     - name: Install package 📦
       run: |
-        # conda info
         python -m pip install --upgrade pip
         pip install .[docs]
     - name: Build 🔨

@@ -1,15 +1,9 @@
 name: release
 
-# Below, replace `never` by `master` or the branch in which you
-# want to release the package from.
-#
-# But preferably, one should add `tags` or `release` as it is
-# not preferable to have a pzpi release on every push in the
-# master.
 on:
   push:
     branches:
-      - never
+      - master
 
 jobs:
   release:
@@ -35,4 +29,4 @@ jobs:
     - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@master
       with:
-        password: ${{ secrets.PYPI_TOKEN }}
+        password: ${{ secrets.PYPI_TIMST }}
