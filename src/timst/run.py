@@ -55,8 +55,6 @@ def args_parser():
 def main():
     """Main function that controls the training"""
     args = args_parser()
-    content = load_image(args.image)
-    style = load_image(args.style)
 
     # Import Vgg pre-trained model
     vgg = models.vgg19(pretrained=True).features
@@ -68,6 +66,10 @@ def main():
     log.info("Checking GPU with CUDA.")
     log.info(f"Cuda Availability: {torch.cuda.is_available()}")
     vgg.to(device)
+
+    # Mode to GPU if available
+    content = load_image(args.image).to(device)
+    style = load_image(args.style).to(device)
 
     style_features = get_features(style, vgg)
     content_features = get_features(content, vgg)
