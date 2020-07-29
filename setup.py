@@ -22,11 +22,6 @@ DOCS_REQUIEREMENTS = ["recommonmark", "sphinx_rtd_theme", "sphinxcontrib-bibtex"
 # Dependencies for the packages
 PACKAGE_REQUIEREMENTS = ["numpy", "torch", "tqdm", "torchvision"]
 
-# Check python version
-if sys.version_info < (3, 6):
-    print(f"{PACKAGE} requires Python 3.6 or later", file=sys.stderr)
-    sys.exit(1)
-
 # Read through Readme
 try:
     this_directory = os.path.abspath(os.path.dirname(__file__))
@@ -54,6 +49,7 @@ setup(
     version=get_version(),
     description="Image style transfer using Torch",
     long_description=long_description,
+    long_description_content_type="text/markdown",
     author="Tanjona R. Rabemananjara",
     author_email="tanjona.rabemananjara@mi.infn.it",
     url="https://github.com/Radonirinaunimi/Style-Transfer",
@@ -62,7 +58,7 @@ setup(
     entry_points={"console_scripts": ["timst = timst.run:main", ]},
     package_dir={"": "src"},
     packages=find_packages("src"),
-    zip_safe=False,
+    package_data={"": ["logo/logo.png"], },
     classifiers=[
         "Operating System :: Unix",
         "Programming Language :: Python",
@@ -70,4 +66,6 @@ setup(
         "Topic :: Scientific/Engineering",
         "Topic :: Scientific/Engineering :: Physics",
     ],
+    setup_requires=["wheel"],
+    python_requires='>=3.6'
 )

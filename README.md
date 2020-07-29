@@ -1,5 +1,11 @@
-![license](https://img.shields.io/github/license/Radonirinaunimi/Style-Transfer?style=flat-square)
-![repo size](https://img.shields.io/github/repo-size/Radonirinaunimi/Style-Transfer?style=flat-square)
+<p align="center">
+  <img alt="Logo" src="https://github.com/Radonirinaunimi/Style-Transfer/blob/master/logo/logo.png" width=500>
+</p>
+<p align="center">
+  <img alt="License" src="https://img.shields.io/github/license/Radonirinaunimi/Style-Transfer?style=flat-square">
+  <img alt="repo size" src="https://img.shields.io/github/repo-size/Radonirinaunimi/Style-Transfer?style=flat-square">
+</p>
+
 #### Description
 ----------------
 
