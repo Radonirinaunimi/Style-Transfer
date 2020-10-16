@@ -9,7 +9,7 @@
 #### Description
 ----------------
 
-**Timst** is a python package based on [pyTorch]() that extracts the features of an image and tranfers them into another; such a technique is known as *image style transfer*. The following implementation is a re-implementation of this [code]() that is based on the following [scientific paper](https://arxiv.org/pdf/1508.06576.pdf). The architecture is based on [Convolutional Neural Network](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf) (CNN) which is one of the applications of [Deep Learning](https://en.wikipedia.org/wiki/Deep_learning).
+**Timst** is a python package based on [pyTorch]() that extracts the features of an image and tranfers them into another; such a technique is known as *image style transfer*. The following implementation is an implementation based on the following [scientific paper](https://arxiv.org/pdf/1508.06576.pdf). The architecture is based on [Convolutional Neural Network](https://www.cv-foundation.org/openaccess/content_cvpr_2016/papers/Gatys_Image_Style_Transfer_CVPR_2016_paper.pdf) (CNN) which is one of the applications of [Deep Learning](https://en.wikipedia.org/wiki/Deep_learning).
 
 
 #### How to install
